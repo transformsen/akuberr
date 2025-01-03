@@ -24,7 +24,7 @@ jobs:
       
       - name: List target directory
         run: ls -la $GITHUB_WORKSPACE/target
-        
+
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -34,4 +34,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'akuberr'
-          package: '$GITHUB_WORKSPACE/target/*.jar'
+          package: '$GITHUB_WORKSPACE/target/akuber-0.0.1-SNAPSHOT.jar'
