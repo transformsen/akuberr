@@ -25,6 +25,9 @@ jobs:
       - name: List target directory
         run: ls -la $GITHUB_WORKSPACE/target
 
+      - name: Verify JAR file exists
+        run: test -f target/akuber-0.0.1-SNAPSHOT.jar && echo "File exists" || echo "File not found"
+
       - name: Azure Login
         uses: azure/login@v1
         with:
