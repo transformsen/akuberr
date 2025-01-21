@@ -32,9 +32,25 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'akuberr'
-          package: 'target/akuber-0.0.1-SNAPSHOT.jar'
+      - name: Build and push Docker image
+        run: |
+          docker build -t senthildockercontainer.azurecr.io/spring-boot-app:latest .
+          docker push senthildockercontainer.azurecr.io/spring-boot-app:latest
+      
+      - name: Set Kubernetes context
+        run: az aks get-credentials --resource-group wingtiptoys-kubernetes --name senthilakuber
+
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -f k8s/deployment.yml
+          kubectl apply -f k8s/service.yml
+
+      # - name: Deploy to Azure Web App
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: 'akuberr'
+      #     package: 'target/akuber-0.0.1-SNAPSHOT.jar'
